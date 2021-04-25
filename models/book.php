@@ -1,6 +1,5 @@
 <?php
-class Book
-{
+class Book {
   // DB stuff
   private $conn;
   private $table = 'book';
@@ -20,8 +19,7 @@ class Book
   public $slug;
 
   // Constructor with DB
-  public function __construct($db)
-  {
+  public function __construct($db) {
     $this->conn = $db;
   }
 
@@ -106,6 +104,21 @@ class Book
     $stmt->bindParam(1, $id);
 
     // Execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  public function getAutherBooks($auther, $page) {
+
+    $limit = 50;
+    $total_skip = ((int)$page-1)*50;
+    
+    $query = 'SELECT * FROM '. $this->table . ' 
+                WHERE auther = ?
+                LIMIT ' . $total_skip . ', ' . $limit;
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(1, $auther);
     $stmt->execute();
 
     return $stmt;
