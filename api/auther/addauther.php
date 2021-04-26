@@ -51,10 +51,17 @@
         $auther->info = 'There is no information about this auther';
       }
       $auther->slug = slugify($auther->name);
-
-      if ($auther->addAuther()) {
+      while ($auther->checkSlug($auther->slug)) {
+        $auther->slug .= rand(0, 10);
+      }
+      $auther_id = $auther->addAuther();
+      if ($auther_id) {
         echo json_encode(array(
-          'message' => 'Added successfully'
+          'id' => $auther_id,
+          'name' => $auther->name,
+          'info' => $auther->info,
+          'slug' => $auther->slug,
+          'imgUrl' => $auther->imgUrl
         ));
       } else {
         http_response_code(400);
@@ -77,11 +84,19 @@
       $auther->info = 'There is no information about this auther';
     }
     $auther->slug = slugify($auther->name);
+    while ($auther->checkSlug($auther->slug)) {
+      $auther->slug .= rand(0, 10);
+    }
 
-    if ($auther->addAuther()) {
-      echo json_encode(array(
-        'message' => 'Added successfully'
-      ));
+    $auther_id = $auther->addAuther();
+      if ($auther_id) {
+        echo json_encode(array(
+          'id' => $auther_id,
+          'name' => $auther->name,
+          'info' => $auther->info,
+          'slug' => $auther->slug,
+          'imgUrl' => $auther->imgUrl
+        ));
     } else {
       http_response_code(400);
       echo json_encode(array(

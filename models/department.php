@@ -12,7 +12,8 @@
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(1, $name);
       if ($stmt->execute()) {
-        return true;
+        $id = $this->conn->lastInsertId(); 
+        return $id;
       } else {
         printf("Error: %s.\n", $stmt->error);
         return false;

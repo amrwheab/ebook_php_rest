@@ -1,0 +1,12 @@
+{
+    "name": "media/ebook",
+    "authors": [
+        {
+            "name": "amrwheab",
+            "email": "amr.wheab2020@gmail.com"
+        }
+    ],
+    "require": {
+        "firebase/php-jwt": "^5.2"
+    }
+}

@@ -23,6 +23,19 @@ class Book {
     $this->conn = $db;
   }
 
+  public function checkSlug($slug) {
+    $query = 'SELECT * FROM ' . $this->table . ' WHERE slug = ?';
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(1, $slug);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // Get Posts
   public function getAllBooks() {
     // Create query
@@ -168,7 +181,8 @@ class Book {
 
     // Execute query
     if ($stmt->execute()) {
-      return true;
+      $id = $this->conn->lastInsertId();
+      return $id;
     }
     printf("Error: %s.\n", $stmt->error);
 

@@ -13,6 +13,19 @@
       $this->conn = $db;
     }
 
+    public function checkSlug($slug) {
+      $query = 'SELECT * FROM ' . $this->table . ' WHERE slug = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(1, $slug);
+      $stmt->execute();
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($row) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     public function getAuthers($page) {
       $limit = 8;
       $total_skip = ((int)$page-1)*8;
@@ -53,7 +66,8 @@
       $stmt->bindParam(':info', $this->info);
       $stmt->bindParam(':slug', $this->slug);
       if ($stmt->execute()) {
-        return true;
+        $id = $this->conn->lastInsertId();
+        return $id;
       } else {
         printf("Error: %s.\n", $stmt->error);
         return false;

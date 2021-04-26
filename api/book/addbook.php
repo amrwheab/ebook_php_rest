@@ -66,10 +66,28 @@
     $book->isFeatured = $_REQUEST['isFeatured'] === "true" ? "1" : "0";
     $book->auther = $_REQUEST['auther'];
     $book->slug = slugify($book->name);
+
+    while ($book->checkSlug($book->slug)) {
+      $book->slug .= rand(0, 10);
+    }
     
-    if($book->addBook()) {
+    $id = $book->addBook();
+    if($id) {
       echo json_encode(
-        array('message' => 'Book Added')
+        array(
+          'id' => $id,
+          'name' => $book->name,
+          'imgUrl' => $book->imgUrl,
+          'info' => $book->info,
+          'price' => $book->price,
+          'department' => $book->department,
+          'buysNum' => $book->buysNum,
+          'miniPath' => $book->miniPath,
+          'fullPath' => $book->fullPath,
+          'isFeatured' => $book->isFeatured,
+          'auther' => $book->auther,
+          'slug' => $book->slug
+          )
       );
     } else {
       echo json_encode(

@@ -15,10 +15,12 @@
   // Instantiate blog post object
   $depart = new Department($db);
   $name = json_decode(file_get_contents('php://input'))->departName;
+  $id = $depart->addDepart($name);
 
-  if ($depart->addDepart($name))  {
+  if ($id)  {
     echo json_encode(array(
-      'message' => 'Added successfully'
+      'id' => $id,
+      'name' => $name
     ));
   } else {
     http_response_code(400);

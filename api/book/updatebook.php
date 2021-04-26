@@ -83,7 +83,16 @@
     }
 
     if ($book->updateBook($id)) {
-      echo json_encode('updated sucessfully');
+      echo json_encode(array(
+            'id' => $id,
+            'name' => $book->name,
+            'info' => $book->info,
+            'price' => $book->price,
+            'department' => $book->department,
+            'buysNum' => $book->buysNum,
+            'isFeatured' => $book->isFeatured,
+            'auther' => $book->auther
+          ));
     } else {
       http_response_code(400);
       echo json_encode('Some thing went wrong');
