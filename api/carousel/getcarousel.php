@@ -4,7 +4,9 @@
 
   include_once '../../config/Database.php';
   include_once '../../models/carousel.php';
+  include_once '../../helpers/cors.php';
 
+  cors_policy();
   $database = new Database();
   $db = $database->connect();
 
@@ -19,9 +21,9 @@
 
     $carousel_item = array(
       'id' => $id,
-      'name' => $title,
-      'imgUrl' => $content,
-      'info' => $img
+      'title' => $title,
+      'content' => $content,
+      'img' => $img
     );
 
     array_push($carousel_arr, $carousel_item);

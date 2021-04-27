@@ -7,7 +7,9 @@
 
   include_once '../../config/Database.php';
   include_once '../../models/department.php';
+  include_once '../../helpers/cors.php';
 
+  cors_policy();
   // Instantiate DB & connect
   $database = new Database();
   $db = $database->connect();

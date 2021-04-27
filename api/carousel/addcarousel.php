@@ -7,7 +7,9 @@
 
   include_once '../../config/Database.php';
   include_once '../../models/carousel.php';
+  include_once '../../helpers/cors.php';
 
+  cors_policy();
   // Instantiate DB & connect
   $database = new Database();
   $db = $database->connect();
@@ -48,9 +50,13 @@
   if (uploadingFile('carouselImg')) {
     $title = $_REQUEST['title'];
     $content = $_REQUEST['content'];
-    if ($carousel->addCarousel($title, $content, $img)) {
+    $car_id = $carousel->addCarousel($title, $content, $img);
+    if ($car_id) {
       echo json_encode(array(
-        'message' => 'Added successfully'
+        'id' => $car_id,
+        'title' => $title,
+        'content' => $content,
+        'img' => $img
       ));
     } else {
       http_response_code(400);

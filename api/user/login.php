@@ -7,7 +7,9 @@
 
   include_once '../../config/Database.php';
   include_once '../../models/user.php';
+  include_once '../../helpers/cors.php';
 
+  cors_policy();
   require __DIR__ . '/../../vendor/autoload.php';
   use \Firebase\JWT\JWT;
 

@@ -17,7 +17,8 @@
       $stmt->bindParam(':content', $content);
       $stmt->bindParam(':img', $img);
       if ($stmt->execute()) {
-      return true;
+        $id = $this->conn->lastInsertId();
+        return $id;
       } else {
       printf("Error: %s.\n", $stmt->error);
       return false;

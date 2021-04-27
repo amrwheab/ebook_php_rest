@@ -8,7 +8,9 @@
   include_once '../../config/Database.php';
   include_once '../../models/book.php';
   include_once '../../helpers/slugify.php';
+  include_once '../../helpers/cors.php';
 
+  cors_policy();
   // Instantiate DB & connect
   $database = new Database();
   $db = $database->connect();

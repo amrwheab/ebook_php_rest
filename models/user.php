@@ -34,7 +34,7 @@
     }
 
     public function getUserById($id) {
-      $query = 'SELECT id, name, email, address, slug FROM ' . $this->table . ' WHERE id = ?';
+      $query = 'SELECT id, name, email, address, slug, isAdmin FROM ' . $this->table . ' WHERE id = ?';
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(1, $id);
       $stmt->execute();

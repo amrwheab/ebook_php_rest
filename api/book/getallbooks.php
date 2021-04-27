@@ -5,18 +5,19 @@
 
   include_once '../../config/Database.php';
   include_once '../../models/book.php';
+  include_once '../../helpers/cors.php';
 
+  cors_policy();
   $database = new Database();
   $db = $database->connect();
 
   $book = new Book($db);
 
+  $page = $_GET['page'];
 
-  $result = $book->getAllBooks();
+  $result = $book->getAllBooks($page);
 
   $num = $result->rowCount();
-
-  if($num > 0) {
 
     $books_arr = array();
 
@@ -51,10 +52,3 @@
     }
 
     echo json_encode($books_arr);
-
-  } else {
-    http_response_code(400);
-    echo json_encode(
-      array('message' => 'No Books Found')
-    );
-  }

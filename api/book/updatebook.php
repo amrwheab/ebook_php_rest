@@ -6,7 +6,9 @@
   
     include_once '../../config/Database.php';
     include_once '../../models/book.php';
-  
+    include_once '../../helpers/cors.php';
+
+    cors_policy();
     // Instantiate DB & connect
     $database = new Database();
     $db = $database->connect();
@@ -24,7 +26,6 @@
     $book->info = $_REQUEST['info'];
     $book->price = $_REQUEST['price'];
     $book->department = $_REQUEST['department'];
-    $book->buysNum = $_REQUEST['buysNum'];
     $book->isFeatured = $_REQUEST['isFeatured'] === "true" ? "1":"0";
     $book->auther = $_REQUEST['auther'];
 
@@ -89,7 +90,6 @@
             'info' => $book->info,
             'price' => $book->price,
             'department' => $book->department,
-            'buysNum' => $book->buysNum,
             'isFeatured' => $book->isFeatured,
             'auther' => $book->auther
           ));

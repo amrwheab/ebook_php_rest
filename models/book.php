@@ -37,7 +37,9 @@ class Book {
   }
 
   // Get Posts
-  public function getAllBooks() {
+  public function getAllBooks($page) {
+    $limit = 20;
+    $total_skip = ((int)$page-1)*20;
     // Create query
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
                 price, buysNum, miniPath, fullPath, isFeatured,
@@ -48,6 +50,7 @@ class Book {
                           auther a ON b.auther = a.id
                         LEFT JOIN
                         department d ON b.department = d.id
+                LIMIT ' . $total_skip . ', ' . $limit .'
                         ';
 
     // Prepare statement
@@ -211,8 +214,7 @@ class Book {
                 SET  name = :name, 
                 info = :info, 
                 price = :price, 
-                department = :department, 
-                buysNum = :buysNum,'
+                department = :department, '
               . $checkImg .  
                 $checkMini .  
                 $checkFull . ' 
@@ -225,7 +227,6 @@ class Book {
     $stmt->bindParam(':info', $this->info);
     $stmt->bindParam(':price', $this->price);
     $stmt->bindParam(':department', $this->department);
-    $stmt->bindParam(':buysNum', $this->buysNum);
     $stmt->bindParam(':isFeatured', $this->isFeatured);
     $stmt->bindParam(':auther', $this->auther);
     
