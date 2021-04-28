@@ -13,12 +13,13 @@
   $auther = new Auther($db);
 
   $page = $_GET['page'];
+  $search = $_GET['search'];
 
-  $result = $auther->getAuthers($page);
-  $num = $result->rowCount();
+  $result = $auther->getAuthers($page, $search);
+  $num = $result['num'];
   $authers_arr = array();
 
-  while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+  while ($row = $result['stmt']->fetch(PDO::FETCH_ASSOC)) {
     extract($row);
 
     $auther_item = array(

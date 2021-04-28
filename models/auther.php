@@ -26,15 +26,32 @@
       }
     }
 
-    public function getAuthers($page) {
+    public function getAuthers($page, $search) {
+
+      $searchQuery = '';
+      if ($search) {
+        global $searchQuery;
+        $searchQuery = 'WHERE name LIKE ? ';
+      }
+
       $limit = 8;
       $total_skip = ((int)$page-1)*8;
 
       $query = 'SELECT * FROM '. $this->table .' 
+                  '. $searchQuery . '
                   LIMIT '.$total_skip. ', ' .$limit; 
       $stmt = $this->conn->prepare($query);
+
+      if ($searchQuery) {
+        $stmt->bindValue(1, "%$search%");
+      }  
+
       $stmt->execute();
-      return $stmt;
+      $nRows = $this->conn->query('SELECT count(*) from '. $this->table)->fetchColumn(); 
+      return array(
+        'stmt' => $stmt,
+        'num' => $nRows
+      );
     }
 
     public function getAuthersNames() {
@@ -102,6 +119,18 @@
     printf("Error: %s.\n", $stmt->error);
 
     return false;
+    }
+
+    public function deleteAuther($id) {
+      $query = 'DELETE FROM '. $this->table . ' WHERE id = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(1, $id);
+      if ($stmt->execute()) {
+        return true;
+      } else {
+        printf("Error: %s.\n", $stmt->error);
+        return false;
+      }
     }
 
   }

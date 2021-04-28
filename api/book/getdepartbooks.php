@@ -28,8 +28,6 @@
 
   $num = $result->rowCount();
 
-  if($num > 0) {
-
     $books_arr = array();
 
     while($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -47,10 +45,3 @@
     }
 
     echo json_encode($books_arr);
-
-  } else {
-    http_response_code(400);
-    echo json_encode(
-      array('message' => 'No Books Found')
-    );
-  }

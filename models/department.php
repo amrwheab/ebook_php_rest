@@ -41,4 +41,16 @@
         return false;
       }
     }
+    
+    public function deleteDepart($id) {
+      $query = 'DELETE FROM '. $this->table . ' WHERE id = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(1, $id);
+      if ($stmt->execute()) {
+        return true;
+      } else {
+        printf("Error: %s.\n", $stmt->error);
+        return false;
+      }
+    }
   }

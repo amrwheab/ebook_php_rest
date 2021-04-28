@@ -14,8 +14,9 @@
   $book = new Book($db);
 
   $page = $_GET['page'];
+  $search = $_GET['search'];
 
-  $result = $book->getAllBooks($page);
+  $result = $book->getAllBooks($page, $search);
 
   $num = $result->rowCount();
 

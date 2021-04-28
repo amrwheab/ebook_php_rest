@@ -52,14 +52,27 @@
     if (isset($_FILES['autherImg'])) {
       if (!uploadingFile('autherImg')) {
         http_response_code(400);
-        echo json_encode('image not loaded');
+        echo json_encode(array(
+          'message' => 'image not loaded',
+          'success' => false
+        ));
         die();
       }
     }
 
     if ($auther->updateAuther($id)) {
-      echo json_encode('updated sucessfully');
+      $auth_res = array(
+        'message' => 'updated sucessfully',
+        'success' => true
+      );
+      if (isset($_FILES['autherImg'])) {
+        $auth_res['imgPath'] =  $auther->imgUrl;
+      }
+      echo json_encode($auth_res);
     } else {
       http_response_code(400);
-      echo json_encode('Some thing went wrong');
+      echo json_encode(array(
+        'message' => 'Some thing went wrong',
+        'success' => false
+      ));
     }
