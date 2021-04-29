@@ -15,12 +15,9 @@
   $book = new Book($db);
 
   $page = $_GET['page'];
-  $url = $_SERVER['PHP_SELF'];
-  
-  $url_arr = explode('/', $url);
-  $param = end($url_arr);
+  $slug = $_GET['slug'];
 
-  $result = $auther->getOneAuther($param);
+  $result = $auther->getOneAuther($slug);
 
   $auther_row = $result->fetch(PDO::FETCH_ASSOC);
 
@@ -34,23 +31,11 @@
     'slug' => $slug
   );
 
-  $book_res = $book->getAutherBooks($param, $page);
-  $books_arr = array();
-  while ($row = $book_res->fetch(PDO::FETCH_ASSOC)) {
-    extract($row);
-
-    $book_item = array(
-      'id' => $id,
-      'name' => $name,
-      'imgUrl' => $imgUrl,
-      'info' => $info,
-      'price' => $price
-    );
-
-    array_push($books_arr, $book_item);
-  }
+  $book_res = $book->getAutherBooksBySlug($auther_arr['slug'], $page);
+  
 
   echo json_encode(array(
     'auther' => $auther_arr,
-    'books' => $books_arr
+    'books' => $book_res['books'],
+    'num' => $book_res['num']
   ));

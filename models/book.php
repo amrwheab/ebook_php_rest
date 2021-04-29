@@ -74,7 +74,8 @@ class Book {
   }
 
   public function getDepartedBooks($id) {
-    $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img, price
+    $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
+              price
                         FROM ' . $this->table . ' b
                         WHERE
                           department = ?
@@ -115,6 +116,58 @@ class Book {
     return $stmt;
   }
 
+  public function getByDepartName($name, $page) {
+    $limit = 20;
+    $total_skip = ((int)$page-1)*20;
+    $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
+                price,
+                d.id as department_id, d.name as department_name
+                        FROM ' . $this->table . ' b
+                        LEFT JOIN
+                        department d ON b.department = d.id
+                WHERE
+                  d.name = ?
+                LIMIT ' . $total_skip . ', ' . $limit;
+
+    // Prepare statement
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(1, $name);
+    // Execute query
+    $stmt->execute();
+
+    $books_arr = array();
+    $depart_id = '';
+
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      extract($row);
+      if (!$depart_id) {
+        $depart_id = $department_id;
+      }
+
+      $book_item = array(
+        'id' => $book_id,
+        'name' => $book_name,
+        'imgUrl' => $book_img,
+        'info' => $book_info,
+        'price' => $price,
+        'slug' => $book_slug,
+      );
+
+      array_push($books_arr, $book_item);
+    }
+
+    $num = $this->conn->query('SELECT count(*) FROM '. $this->table . ' b
+                                LEFT JOIN 
+                                department d ON b.department = d.id
+                                WHERE 
+                                  d.id = ' . $depart_id)->fetchColumn();
+
+    return array(
+      'books' => $books_arr,
+      'num' => $num
+    );
+  }
+
   public function getOneBook($id) {
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
                 price, buysNum, miniPath, fullPath, isFeatured,
@@ -151,15 +204,61 @@ class Book {
     return $stmt;
   }
 
+  public function getAutherBooksBySlug($slug, $page) {
+
+    $limit = 20;
+    $total_skip = ((int)$page-1)*20;
+    
+    $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
+                price, a.id as auther_id
+              FROM '. $this->table . ' b
+                LEFT JOIN
+                auther a ON b.auther = a.id
+                WHERE a.slug = ?
+                LIMIT ' . $total_skip . ', ' . $limit;
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(1, $slug);
+    $stmt->execute();
+
+    $autherId = '';
+    $books_arr = array();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      extract($row);
+
+      if (!$autherId) {
+        $autherId = $auther_id;
+      }
+
+      $book_item = array(
+        'id' => $book_id,
+        'name' => $book_name,
+        'info' => $book_info,
+        'imgUrl' => $book_img,
+        'slug' => $book_slug,
+        'price' => $price
+      );
+
+    array_push($books_arr, $book_item);
+  }
+
+    $num = $this->conn->query('SELECT count(*) FROM '. $this->table . '
+                                    WHERE auther = ' . $autherId)->fetchColumn();
+
+    return array(
+      'books' => $books_arr,
+      'num' => $num
+    );
+  }
+
   public function getBooksCount() {
-    $query = 'SELECT *
+    $query = 'SELECT count(*)
                   FROM ' . $this->table;
 
     // Prepare statement
-    $stmt = $this->conn->prepare($query);
+    $stmt = $this->conn->query($query);
 
     // Execute query
-    $stmt->execute();
+    $stmt->fetchColumn();
 
     return $stmt;
   }

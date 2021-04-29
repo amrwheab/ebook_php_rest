@@ -38,7 +38,8 @@
         'name' => $book_name,
         'imgUrl' => $book_img,
         'info' => $book_info,
-        'price' => $price
+        'price' => $price,
+        'slug' => $book_slug,
       );
 
       array_push($books_arr, $book_item);

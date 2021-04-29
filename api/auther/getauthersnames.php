@@ -20,7 +20,8 @@
 
     $auther_item = array(
       'id' => $id,
-      'name' => $name
+      'name' => $name,
+      'slug' => $slug
     );
 
     array_push($authers_arr, $auther_item);

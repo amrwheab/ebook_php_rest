@@ -55,18 +55,18 @@
     }
 
     public function getAuthersNames() {
-      $query = 'SELECT id, name FROM '. $this->table . ' 
+      $query = 'SELECT id, name, slug FROM '. $this->table . ' 
                   LIMIT 10';
       $stmt = $this->conn->prepare($query);
       $stmt->execute();
       return $stmt;
     }
 
-    public function getOneAuther($id) {
+    public function getOneAuther($slug) {
       $query = 'SELECT * FROM '. $this->table . ' 
-                  WHERE id = ?';
+                  WHERE slug = ?';
       $stmt = $this->conn->prepare($query);
-      $stmt->bindParam(1, $id);
+      $stmt->bindParam(1, $slug);
       $stmt->execute();
       return $stmt;
     }
