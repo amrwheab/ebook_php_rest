@@ -250,6 +250,26 @@ class Book {
     );
   }
 
+  public function getBookBySlug($slug) {
+    $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
+    price, buysNum, miniPath, fullPath, isFeatured,
+    a.id as auther_id, a.name as auther_name, a.slug as auther_slug,
+    d.id as department_id, d.name as department_name
+            FROM ' . $this->table . ' b
+    LEFT JOIN
+    auther a ON b.auther = a.id
+    LEFT JOIN
+    department d ON b.department = d.id
+    WHERE b.slug = ?
+    ';
+
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(1, $slug);
+    $stmt->execute();
+
+    return $stmt;
+  }
+
   public function getBooksCount() {
     $query = 'SELECT count(*)
                   FROM ' . $this->table;
