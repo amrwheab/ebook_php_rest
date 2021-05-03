@@ -41,6 +41,7 @@
     echo json_encode('user is exist');
   } else {
     if ($user->addUser($name, $email, $hashPass, $address, $slug)) {
+      
       $id = $user->getUserByEmail($email)['id'];
       $key = "djfheufeirieueurhteieetyui";
       $payload = array("id" => $id);

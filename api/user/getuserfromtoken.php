@@ -23,6 +23,7 @@
 
   $user_arr = $user->getUserById($id);
   $user_arr['isAdmin'] === '1' ? $user_arr['isAdmin'] = true : $user_arr['isAdmin'] = false;
+  $user_arr['mainAdmin'] === '1' ? $user_arr['mainAdmin'] = true : $user_arr['mainAdmin'] = false;
   if ($user_arr) {
     echo json_encode($user_arr);
   } else {
