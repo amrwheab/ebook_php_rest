@@ -395,4 +395,21 @@ class Book {
     }
     return $deleteCheck;
   }
+
+  public function getBooksPrice($bookIds) {
+    $price = 0;
+    for ($i = 0; $i < count($bookIds); $i++) {
+      $query = 'SELECT price FROM ' . $this->table . ' WHERE id = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(1, $bookIds[$i]);
+      $stmt->execute();
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($row) {
+        $price += (float)$row['price'];
+      } else {
+        return -1;
+      }
+    }
+    return $price;
+  }
 }

@@ -19,20 +19,32 @@
   $key = "djfheufeirieueurhteieetyui";
   $userId = $userId = JWT::decode($token, $key, array('HS256'))->id;
 
-  $result = $cart->getMiniCart($userId);
+  $result = $cart->getFullCart($userId);
+  $fullprice = 0;
   $cart_arr = array();
 
   while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
     extract($row);
-
+    if ($buyed === '0') {
+      $fullprice += $price;
+    }
     $cart_item = array(
-      'id' => $id,
-      'userId' => $user_id,
-      'bookId' => $book_id,
-      'buyed' => $buyed === '1' ? true : false
+      'id' => $cart_id,
+      'book' => array(
+        'id' => $book_id,
+        'name' => $book_name,
+        'info' => $book_info,
+        'imgUrl' => $book_img,
+        'slug' => $book_slug,
+        'price' => $price,
+        'buyed' => $buyed === '1' ? true : false
+      )
     );
 
     array_push($cart_arr, $cart_item);
   }
 
-  echo json_encode($cart_arr);
+  echo json_encode(array(
+    'cart' => $cart_arr,
+    'fullprice' => $fullprice
+  ));
