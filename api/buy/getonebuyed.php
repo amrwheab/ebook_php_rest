@@ -17,6 +17,6 @@
   $bookId = $_GET['bookId'];
   
 
-  $result = $buy->getMiniBuyed($bookId, $userId);
+  $result = $buy->getMiniBuyed($bookId, $userId)->fetch();
   
   echo json_encode($result);

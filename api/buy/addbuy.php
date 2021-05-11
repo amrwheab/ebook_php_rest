@@ -38,9 +38,14 @@
     );
     if ($charge['status'] === 'succeeded') {
       if ($buy->addBuy($userId, $bookIds)) {
-        echo json_encode('added successfully');
-        for ($i = 0; $i < count($bookIds); $i++) {
-          $cart->makeBuy($userId, $bookIds[$i]);
+        if ($book->addOneBuy($bookIds)) {
+          echo json_encode('added successfully');
+          for ($i = 0; $i < count($bookIds); $i++) {
+            $cart->makeBuy($userId, $bookIds[$i]);
+          }
+        } else {
+          http_response_code(400);
+          echo json_encode('some thing went wrong');
         }
       } else {
         http_response_code(400);

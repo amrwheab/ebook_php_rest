@@ -104,6 +104,7 @@ class Book {
                         department d ON b.department = d.id
                 WHERE
                   isFeatured = ?
+                LIMIT 20
                         ';
 
     // Prepare statement
@@ -183,6 +184,17 @@ class Book {
 
     $stmt->bindParam(1, $id);
 
+    // Execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
+  public function getMostBuyedBooks() {
+    $query = 'SELECT * FROM '.$this->table.' WHERE buysNum > 0 ORDER BY buysNum DESC LIMIT 20';
+
+    // Prepare statement
+    $stmt = $this->conn->prepare($query);
     // Execute query
     $stmt->execute();
 
@@ -320,6 +332,23 @@ class Book {
     printf("Error: %s.\n", $stmt->error);
 
     return false;
+  }
+
+  public function addOneBuy($ids) {
+    for ($i = 0; $i < count($ids); $i++) {
+      $query = 'UPDATE '.$this->table.'
+      SET buysNum = buysNum + 1
+      WHERE id = ?';
+      $stmt = $this->conn->prepare($query);
+      $stmt->bindParam(1, $ids[$i]);
+  
+      // Execute query
+      if (!$stmt->execute()) {
+        printf("Error: %s.\n", $stmt->error);
+        return false;
+      }
+    }
+    return true;
   }
 
   public function updateBook($id) {

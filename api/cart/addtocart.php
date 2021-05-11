@@ -29,7 +29,7 @@
   $userId = JWT::decode($token, $key, array('HS256'))->id;
 
   if ((int)$cart->getCartCount($userId, $bookId) <= 20) {
-    if ($buy->getMiniBuyed($bookId, $userId)) {
+    if ($buy->getMiniBuyed($bookId, $userId)->fetch()) {
       if ($cart->addToCart($bookId, $userId, '1')) {
         echo json_encode(array('message' => 'added successfully'));
       } else {
