@@ -8,15 +8,9 @@
   include_once '../../helpers/cors.php';
 
   cors_policy();
-  $url = $_SERVER['PHP_SELF'];
-  $param = '';
-  for ($i = strlen($url)-1; $i >= 0; $i--) {
-    if ($url[$i] !== '/') {
-      $param = $url[$i] . $param;
-    } else {
-      break;
-    }
-  }
+  
+  $param = $_GET['id'];
+  
 
   $database = new Database();
   $db = $database->connect();

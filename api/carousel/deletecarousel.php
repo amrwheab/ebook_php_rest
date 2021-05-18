@@ -13,8 +13,8 @@
   
     // Instantiate blog post object
     $carousel = new Carousel($db);
-    $params = explode('/' ,$_SERVER['PHP_SELF']);
-    $id = end($params);
+    
+    $id = $_GET['id'];
 
     if ($carousel->deleteCarousel($id)) {
       echo json_encode('deleted successfully');

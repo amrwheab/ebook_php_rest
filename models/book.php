@@ -37,15 +37,14 @@ class Book {
   }
 
   // Get Posts
-  public function getAllBooks($page, $search) {
+  public function getAllBooks($page, $search, $limit) {
     $searchQuery = '';
     if ($search) {
       global $searchQuery;
       $searchQuery = 'WHERE b.name LIKE ? ';
     }
 
-    $limit = 20;
-    $total_skip = ((int)$page-1)*20;
+    $total_skip = ((int)$page-1)*$limit;
 
     // Create query
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,

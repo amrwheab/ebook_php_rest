@@ -15,8 +15,9 @@
 
   $page = $_GET['page'];
   $search = $_GET['search'];
+  $limit = $_GET['limit'];
 
-  $result = $book->getAllBooks($page, $search);
+  $result = $book->getAllBooks($page, $search, $limit);
 
   $num = $result->rowCount();
 

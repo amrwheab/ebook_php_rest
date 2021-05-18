@@ -15,8 +15,7 @@
   $db = $database->connect();
   $user = new User($db);
 
-  $params = explode('/', $_SERVER['PHP_SELF']);
-  $token = end($params);
+  $token = $_GET['token'];
   $key = "djfheufeirieueurhteieetyui";
 
   $id = JWT::decode($token, $key, array('HS256'))->id;
