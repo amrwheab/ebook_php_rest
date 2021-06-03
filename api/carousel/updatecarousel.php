@@ -22,6 +22,7 @@
 
     $title = $_REQUEST['title'];
     $content = $_REQUEST['content'];
+    $action = $_REQUEST['action'];
 
     function getImgType($name) {
       $res = '';
@@ -57,7 +58,7 @@
       }
     }
 
-    if ($carousel->updateCarousel($id, $title, $content, $img)) {
+    if ($carousel->updateCarousel($id, $title, $content, $img, $action)) {
       echo json_encode('updated sucessfully');
     } else {
       http_response_code(400);

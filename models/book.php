@@ -74,7 +74,7 @@ class Book {
 
   public function getDepartedBooks($id) {
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
-              price
+              price, rate, rateNum
                         FROM ' . $this->table . ' b
                         WHERE
                           department = ?
@@ -93,7 +93,7 @@ class Book {
 
   public function getFeatBooks() {
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
-                price, buysNum, miniPath, fullPath,
+                price, buysNum, miniPath, fullPath, rate, rateNum,
                 a.id as auther_id, a.imgUrl as auther_img, a.info as auther_info, a.name as auther_name, a.slug as auther_slug,
                 d.id as department_id, d.name as department_name
                         FROM ' . $this->table . ' b
@@ -120,7 +120,7 @@ class Book {
     $limit = 20;
     $total_skip = ((int)$page-1)*20;
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
-                price,
+                price, rate, rateNum,
                 d.id as department_id, d.name as department_name
                         FROM ' . $this->table . ' b
                         LEFT JOIN
@@ -151,6 +151,7 @@ class Book {
         'info' => $book_info,
         'price' => $price,
         'slug' => $book_slug,
+        'rate' => $rateNum > 0 ? $rate/$rateNum : 0
       );
 
       array_push($books_arr, $book_item);
@@ -168,9 +169,31 @@ class Book {
     );
   }
 
+  public function getRelatedBooks($department, $auther, $bookId) {
+    $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
+              price, rate, rateNum
+              FROM book b
+              WHERE
+              (department = ? || auther = ?) && b.id != ?
+              LIMIT 5
+              ';
+
+    // Prepare statement
+    $stmt = $this->conn->prepare($query);
+
+    $stmt->bindParam(1, $department);
+    $stmt->bindParam(2, $auther);
+    $stmt->bindParam(3, $bookId);
+
+    // Execute query
+    $stmt->execute();
+
+    return $stmt;
+  }
+
   public function getOneBook($id) {
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
-                price, buysNum, miniPath, fullPath, isFeatured,
+                price, buysNum, miniPath, fullPath, isFeatured
                 d.id as department_id, d.name as department_name
                         FROM ' . $this->table . ' b
                         LEFT JOIN
@@ -221,7 +244,7 @@ class Book {
     $total_skip = ((int)$page-1)*20;
     
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
-                price, a.id as auther_id
+                price, a.id as auther_id, rate, rateNum
               FROM '. $this->table . ' b
                 LEFT JOIN
                 auther a ON b.auther = a.id
@@ -246,7 +269,8 @@ class Book {
         'info' => $book_info,
         'imgUrl' => $book_img,
         'slug' => $book_slug,
-        'price' => $price
+        'price' => $price,
+        'rate' => $rateNum > 0 ? $rate/$rateNum : 0
       );
 
     array_push($books_arr, $book_item);

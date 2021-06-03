@@ -23,7 +23,8 @@
       'id' => $id,
       'title' => $title,
       'content' => $content,
-      'img' => $img
+      'img' => $img,
+      'action' => $action
     );
 
     array_push($carousel_arr, $carousel_item);

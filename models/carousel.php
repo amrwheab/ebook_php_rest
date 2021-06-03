@@ -7,15 +7,17 @@
       $this->conn = $db;
     }
 
-    public function addCarousel($title, $content, $img) {
+    public function addCarousel($title, $content, $img, $action) {
       $query = 'INSERT INTO '. $this->table . ' 
       SET title = :title,
       content = :content,
-      img = :img';
+      img = :img,
+      action = :action';
       $stmt = $this->conn->prepare($query);
       $stmt->bindParam(':title', $title);
       $stmt->bindParam(':content', $content);
       $stmt->bindParam(':img', $img);
+      $stmt->bindParam(':action', $action);
       if ($stmt->execute()) {
         $id = $this->conn->lastInsertId();
         return $id;
@@ -25,7 +27,7 @@
       }
     }
 
-    public function updateCarousel($id, $title, $content, $img) {
+    public function updateCarousel($id, $title, $content, $img, $action) {
       $checkImg = '';
 
       if (strlen($img) > 0) {
@@ -35,13 +37,15 @@
 
       $query = 'UPDATE ' . $this->table . '
                   SET  title = :title, 
-                  content = :content'
+                  content = :content,
+                  action = :action'
                 . $checkImg .' 
                   WHERE id = :id';
     $stmt = $this->conn->prepare($query);
     $stmt->bindParam(':id', $id);
     $stmt->bindParam(':title', $title);
     $stmt->bindParam(':content', $content);
+    $stmt->bindParam(':action', $action);
     
     if (strlen($img) > 0) {
       $stmt->bindParam(':img', $img);

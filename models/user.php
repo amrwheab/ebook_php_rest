@@ -46,6 +46,29 @@
       }
     }
 
+    public function getAllUsers($page, $limit, $search) {
+      $searchQuery = $search ? ' WHERE name LIKE ? ' : ' ';
+      $skip = ((int)$page - 1) * (int)$limit;
+      $query = 'SELECT * From '. $this->table.$searchQuery. 'LIMIT '.$skip.', '.$limit;
+      $stmt = $this->conn->prepare($query);
+      $search ? $stmt->bindValue(1, "%$search%") : false;
+      $stmt->execute();
+      return $stmt;
+    }
+
+    public function makeAdmin($value, $userId) {
+      $query = 'UPDATE '. $this->table .' SET isAdmin = ? WHERE id = ?';
+      $stmt = $this->conn->prepare($query);
+      $isAdmin = $value ? '1':'0';
+      $stmt->bindParam(1, $isAdmin);
+      $stmt->bindParam(2, $userId);
+      if ($stmt->execute()) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     public function addUser($name, $email, $password, $address, $slug) {
       $query = 'INSERT INTO ' . $this->table . ' 
                   SET name = :name,

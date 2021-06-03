@@ -26,7 +26,8 @@
       'imgUrl' => $imgUrl,
       'info' => $info,
       'price' => $price,
-      'slug' => $slug
+      'slug' => $slug,
+      'rate' => $rateNum > 0 ? $rate/$rateNum : 0
     );
 
     array_push($books_arr, $book_item);

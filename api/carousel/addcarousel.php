@@ -50,13 +50,15 @@
   if (uploadingFile('carouselImg')) {
     $title = $_REQUEST['title'];
     $content = $_REQUEST['content'];
-    $car_id = $carousel->addCarousel($title, $content, $img);
+    $action = $_REQUEST['action'];
+    $car_id = $carousel->addCarousel($title, $content, $img, $action);
     if ($car_id) {
       echo json_encode(array(
         'id' => $car_id,
         'title' => $title,
         'content' => $content,
-        'img' => $img
+        'img' => $img,
+        'action' => $action
       ));
     } else {
       http_response_code(400);
