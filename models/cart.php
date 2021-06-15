@@ -19,7 +19,7 @@ class Cart {
 
   public function getFullCart($userId) {
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
-              price,
+              price, rate, rateNum,
               c.id as cart_id, buyed
               From ' . $this->table . ' c
                 LEFT JOIN book b

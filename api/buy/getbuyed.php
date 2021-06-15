@@ -28,7 +28,9 @@
       'info' => $book_info,
       'imgUrl' => $book_img,
       'slug' => $book_slug,
-      'price' => $price
+      'price' => $price,
+      'rate' => $rateNum > 0 ? $rate/$rateNum : 0,
+      'rateNum' => $rateNum
     ));
   }
   

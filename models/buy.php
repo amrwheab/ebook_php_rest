@@ -44,7 +44,7 @@
     $total_skip = ((int)$page-1)*20;
 
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
-    price
+    price, rate, rateNum
                 FROM ' . $this->table . ' bu
                 LEFT JOIN book b ON b.id = bu.book_id
                 WHERE bu.user_id = ?

@@ -37,7 +37,9 @@
         'imgUrl' => $book_img,
         'slug' => $book_slug,
         'price' => $price,
-        'buyed' => $buyed === '1' ? true : false
+        'buyed' => $buyed === '1' ? true : false,
+        'rate' => $rateNum > 0 ? $rate/$rateNum : 0,
+        'rateNum' => $rateNum
       )
     );
 

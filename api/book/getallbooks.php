@@ -47,7 +47,9 @@
           'imgUrl' => $auther_img,
           'slug' => $auther_slug,
         ),
-        'slug' => $book_slug
+        'slug' => $book_slug,
+        'rate' => $rateNum > 0 ? $rate/$rateNum : 0,
+        'rateNum' => $rateNum
       );
 
       array_push($books_arr, $book_item);

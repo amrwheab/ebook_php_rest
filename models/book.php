@@ -48,7 +48,7 @@ class Book {
 
     // Create query
     $query = 'SELECT b.id as book_id, b.name as book_name, b.info as book_info, b.imgUrl as book_img,b.slug as book_slug,
-                price, buysNum, miniPath, fullPath, isFeatured,
+                price, buysNum, miniPath, fullPath, isFeatured, rate, rateNum,
                 a.id as auther_id, a.imgUrl as auther_img, a.info as auther_info, a.name as auther_name, a.slug as auther_slug,
                 d.id as department_id, d.name as department_name
                         FROM ' . $this->table . ' b
@@ -151,7 +151,8 @@ class Book {
         'info' => $book_info,
         'price' => $price,
         'slug' => $book_slug,
-        'rate' => $rateNum > 0 ? $rate/$rateNum : 0
+        'rate' => $rateNum > 0 ? $rate/$rateNum : 0,
+        'rateNum' => $rateNum
       );
 
       array_push($books_arr, $book_item);
@@ -270,7 +271,8 @@ class Book {
         'imgUrl' => $book_img,
         'slug' => $book_slug,
         'price' => $price,
-        'rate' => $rateNum > 0 ? $rate/$rateNum : 0
+        'rate' => $rateNum > 0 ? $rate/$rateNum : 0,
+        'rateNum' => $rateNum
       );
 
     array_push($books_arr, $book_item);
